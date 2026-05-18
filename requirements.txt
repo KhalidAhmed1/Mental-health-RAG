@@ -1,0 +1,6 @@
+sentence-transformers
+joblib
+pandas
+tqdm
+numpy
+qdrant-client
