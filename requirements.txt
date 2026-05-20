@@ -4,3 +4,7 @@ pandas
 tqdm
 numpy
 qdrant-client
+datasets
+scikit-learn
+nltk
+torch
