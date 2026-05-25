@@ -1,0 +1,46 @@
+[
+  {
+    "query": "Hi, how are you?",
+    "intent": "greeting"
+  },
+  {
+    "query": "Hello there!",
+    "intent": "greeting"
+  },
+  {
+    "query": "Bye!",
+    "intent": "goodbye"
+  },
+  {
+    "query": "Goodbye and take care",
+    "intent": "goodbye"
+  },
+  {
+    "query": "Thank you so much",
+    "intent": "gratitude"
+  },
+  {
+    "query": "That was very helpful",
+    "intent": "gratitude"
+  },
+  {
+    "query": "I feel anxious lately",
+    "intent": "asking_mental_health_question"
+  },
+  {
+    "query": "I've been feeling depressed",
+    "intent": "asking_mental_health_question"
+  },
+  {
+    "query": "I can't sleep because of stress",
+    "intent": "asking_mental_health_question"
+  },
+  {
+    "query": "What's the weather today?",
+    "intent": "out_of_scope"
+  },
+  {
+    "query": "How do I bake a cake?",
+    "intent": "out_of_scope"
+  }
+]
