@@ -10,7 +10,7 @@ not on every request. This keeps each request fast.
 from modules.language         import predict_language
 from modules.llm              import get_rag_answer, get_direct_response, translate_to_english
 from modules.intent_classifier import IntentClassifier, get_intent_with_context
-# from modules.emotion import predict_emotion
+from modules.emotion import predict_emotion
 
 
 # ── Load Module 3 once at startup ────────────────────────────────────────────
@@ -55,8 +55,8 @@ def pipeline(user_message: str, history: list = None) -> dict:
         english_text = user_message
 
     # ── Module 2 : Detect emotion ────────────────────────────────────────────
-    emotion = "joy"                          # hardcoded until model is received
-    # emotion = predict_emotion(english_text)
+                             
+    emotion = predict_emotion(english_text)
 
     # ── Module 3 : Detect intent (context-aware) ─────────────────────────────
     intent = get_intent_with_context(english_text, history, intent_classifier)
