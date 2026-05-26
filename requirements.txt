@@ -8,3 +8,8 @@ datasets
 scikit-learn
 nltk
 torch
+python-dotenv
+openai
+pydantic
+langchain-core
+langchain-groq
