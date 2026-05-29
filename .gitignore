@@ -1,2 +1,6 @@
 .env
 models
+.venv/
+.vscode/
+__pycache__/
+.python-version
