@@ -37,7 +37,7 @@ def evaluator_llm():
 def evaluator_embeddings():
     """Initializes wrapped Hugging Face embeddings with native langchain attributes."""
     return HuggingFaceEmbeddings(
-        model_name="all-MiniLM-L6-v2"
+        model_name="all-mpnet-base-v2"
     )
 
 
