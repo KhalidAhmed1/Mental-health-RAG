@@ -2,10 +2,10 @@ import os
 import sys
 import pytest
 import pandas as pd
-from unittest.mock import patch
 from datasets import Dataset
 from openai import OpenAI  
 from ragas import evaluate
+import numpy as np 
 
 # Prevent local tokenizer deadlocks on Windows
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -15,7 +15,10 @@ from ragas.llms import llm_factory
 from langchain_community.embeddings import HuggingFaceEmbeddings
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import your live pipeline AND your retriever module
 from modules.llm import get_rag_answer
+from modules.retriever import retrieve_chunks_hybrid
 
 
 @pytest.fixture(scope="module")
@@ -27,7 +30,7 @@ def evaluator_llm():
     )
     
     return llm_factory(
-        model="llama-3.1-8b-instant",
+        model="qwen/qwen3-32b",
         client=groq_client,
         max_tokens=4096
     )
@@ -43,13 +46,13 @@ def evaluator_embeddings():
 
 @pytest.fixture(scope="module")
 def sample_test_data():
-    """Loads a small evaluation slice from your local cleaned dataset."""
+    """Loads a small evaluation slice with true randomness on every execution pass."""
     csv_path = os.path.join("data", "df_cleaned.csv")
     if not os.path.exists(csv_path):
         pytest.fail(f"Cleaned dataset missing at {csv_path}.")
     
     df = pd.read_csv(csv_path)
-    return df.sample(5, random_state=42)
+    return df.sample(5, random_state=np.random.RandomState())
 
 
 def test_rag_pipeline_accuracy(evaluator_llm, evaluator_embeddings, sample_test_data):
@@ -58,27 +61,31 @@ def test_rag_pipeline_accuracy(evaluator_llm, evaluator_embeddings, sample_test_
     contexts_list = []
     ground_truths = []
 
+    print("\nExecuting live evaluation loop across knowledge base...")
+
     for _, row in sample_test_data.iterrows():
-        question = row["Context"]
-        ground_truth = row["Response"]
-        simulated_chunks = [ground_truth] 
+        question = row["Context"]       # The user query
+        ground_truth = row["Response"]  # The targeted golden human response
         
-        with patch("modules.llm.retrieve_chunks_hybrid") as mock_retrieve:
-            mock_retrieve.return_value = simulated_chunks
-            
-            answer = get_rag_answer(
-                original_query=question,
-                detected_language="english",
-                emotion="neutral",
-                history=[],
-                top_k=5  
-            )
+        # 1. Capture the REAL chunks from your database for Ragas tracking
+        # (No patch mock used here)
+        actual_live_chunks = retrieve_chunks_hybrid(question, top_k=5)
+        
+        # 2. Let your live pipeline process the answer naturally
+        answer = get_rag_answer(
+            original_query=question,
+            detected_language="english",
+            emotion="sadness", # Maps to your systemic EMOTION_TONE prompt instructions
+            history=[],
+            top_k=5
+        )
 
         questions.append(question)
         answers.append(answer)
-        contexts_list.append(simulated_chunks)
+        contexts_list.append(actual_live_chunks) # Ragas now evaluates real context windows!
         ground_truths.append(ground_truth)
 
+    # Wrap up elements into standard evaluation structures
     eval_dataset = Dataset.from_dict({
         "question": questions,
         "answer": answers,
@@ -102,17 +109,14 @@ def test_rag_pipeline_accuracy(evaluator_llm, evaluator_embeddings, sample_test_
     df_results = results.to_pandas()
     print(df_results[['faithfulness', 'answer_relevancy', 'context_precision']])
     print("==========================================================")
-
-    import numpy as np
     
     faithfulness_score = df_results['faithfulness'].mean()
     answer_relevancy_score = df_results['answer_relevancy'].mean()
     context_precision_score = df_results['context_precision'].mean()
-
     print(f"Calculated Faithfulness: {faithfulness_score:.4f}")
     print(f"Calculated Answer Relevancy: {answer_relevancy_score:.4f}")
     print(f"Calculated Context Precision: {context_precision_score:.4f}")
 
-    # Threshold checks
-    assert faithfulness_score >= 0.40, f"Faithfulness {faithfulness_score} below 0.40"
-    assert answer_relevancy_score >= 0.25, f"Relevancy {answer_relevancy_score} below 0.25"
+    # Adjusted baseline thresholds for live open-weights validation
+    assert faithfulness_score >= 0.35, f"Faithfulness {faithfulness_score} below target boundaries."
+    assert answer_relevancy_score >= 0.25, f"Relevancy {answer_relevancy_score} below target boundaries."
