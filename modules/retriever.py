@@ -9,7 +9,7 @@ from sentence_transformers import SentenceTransformer, CrossEncoder
 load_dotenv()
 
 # ── Config ──────────────────────────────────────────────────────────────────
-COLLECTION_NAME = "mental_health_contexts"
+COLLECTION_NAME = "mental_health_rag"
 MODEL_NAME      = "all-mpnet-base-v2"
 SEMANTIC_WEIGHT = 0.7
 BM25_WEIGHT     = 0.3
