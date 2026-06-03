@@ -18,7 +18,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import your live pipeline AND your retriever module
 from modules.llm import get_rag_answer
-from modules.retriever import retrieve_chunks_hybrid
+from modules.retriever import retrieve_responses_hybrid
 
 
 @pytest.fixture(scope="module")
@@ -69,7 +69,7 @@ def test_rag_pipeline_accuracy(evaluator_llm, evaluator_embeddings, sample_test_
         
         # 1. Capture the REAL chunks from your database for Ragas tracking
         # (No patch mock used here)
-        actual_live_chunks = retrieve_chunks_hybrid(question, top_k=5)
+        actual_live_chunks = retrieve_responses_hybrid(question, top_k=5)
         
         # 2. Let your live pipeline process the answer naturally
         answer = get_rag_answer(

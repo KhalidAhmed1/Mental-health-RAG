@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from modules.retriever import retrieve_chunks_hybrid
+from modules.retriever import retrieve_responses_hybrid
 
 load_dotenv()
 
@@ -65,7 +65,7 @@ def build_prompt(query: str, chunks: list, emotion: str, language: str):
     Parameters
     ----------
     query    : English version of the user's question
-    chunks   : top-k retrieved chunk texts
+    chunks   : top-k retrieved therapist responses
     emotion  : one of the 6 emotion labels
     language : full language name e.g. 'English', 'Arabic'
     """
@@ -136,7 +136,7 @@ def get_rag_answer(
     else:
         english_text = original_query
 
-    chunks               = retrieve_chunks_hybrid(english_text, top_k=top_k)
+    chunks               = retrieve_responses_hybrid(english_text, top_k=top_k)
     system_msg, user_msg = build_prompt(english_text, chunks, emotion, detected_language)
     answer               = call_llm(system_msg, user_msg, history)
 
