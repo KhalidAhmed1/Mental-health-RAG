@@ -19,7 +19,7 @@ An emotion-aware Retrieval-Augmented Generation (RAG) chatbot that delivers empa
 
 ```
 Mental-health-RAG/
-├── .env                        # API keys and service URLs (never commit)
+├── .env                        # API keys and service URLs
 ├── .python-version             # Pinned Python version
 ├── app.py                      # Streamlit / FastAPI entry point
 ├── pipeline.py                 # Top-level orchestration pipeline
@@ -220,7 +220,7 @@ pytest tests/test_rag_evaluation.py -v
 | Answer Relevancy | ≥ 0.25 |
 | Context Precision | measured, no hard threshold |
 
-The evaluator uses `llama-3.1-8b-instant` via Groq and `all-MiniLM-L6-v2` embeddings from HuggingFace. Retrieval is mocked during evaluation so that ground-truth chunks are injected directly, isolating generation quality from retrieval noise.
+The evaluator uses `llama-3.1-8b-instant` via Groq and `all-mpnet-base-v2` embeddings from HuggingFace. Retrieval is mocked during evaluation so that ground-truth chunks are injected directly, isolating generation quality from retrieval noise.
 
 ---
 
@@ -233,7 +233,8 @@ The evaluator uses `llama-3.1-8b-instant` via Groq and `all-MiniLM-L6-v2` embedd
 | Intent classification | `llama-3.3-70b-versatile` | Groq API |
 | Translation | `llama-3.1-8b-instant` | Groq API |
 | RAG generation | `llama-3.1-8b-instant` | Groq API |
-| Embeddings (retrieval) | `all-MiniLM-L6-v2` | `sentence-transformers` |
+| Embeddings (retrieval) | `all-mpnet-base-v2` | `sentence-transformers` |
+| Reranker | `BAAI/bge-reranker-v2-m3` | `CrossEncoder` (sentence-transformers) |
 
 ---
 
