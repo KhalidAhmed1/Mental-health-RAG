@@ -36,7 +36,7 @@ Mental-health-RAG/
 ├── models/
 │   ├── language_svc_model.pkl  # Trained SVC model for language detection
 │   ├── tfidf_vectorizer.pkl    # TF-IDF vectorizer for language detection
-│   ├── emotion.pkl    # trained model for emotion detection
+│   └── emotion.pkl    # trained model for emotion detection
 │   
 │
 ├── modules/
