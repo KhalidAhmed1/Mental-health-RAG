@@ -1,0 +1,15 @@
+numpy
+pandas
+python-dotenv
+rank-bm25
+qdrant-client
+sentence-transformers
+transformers
+torch
+openai
+joblib
+scikit-learn
+pydantic
+langchain
+langchain-groq
+pytest
