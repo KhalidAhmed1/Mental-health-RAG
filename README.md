@@ -9,7 +9,7 @@ An emotion-aware Retrieval-Augmented Generation (RAG) chatbot that delivers empa
 - **Multilingual support** — Detects the user's language (20+ languages) and responds in kind, translating queries to English for retrieval before translating answers back.
 - **Emotion-aware tone** — Classifies the emotional state of each message (sadness, joy, fear, anger, love, surprise) and adjusts the LLM's response tone accordingly.
 - **Intent routing** — Routes greetings, farewells, gratitude, and out-of-scope questions directly without hitting the RAG pipeline, reserving retrieval for genuine mental health queries.
-- **Hybrid retrieval** — Combines dense semantic search (Qdrant + `all-MiniLM-L6-v2`) with sparse BM25 scoring at a 0.7 / 0.3 blend for high-quality chunk retrieval.
+- **Hybrid retrieval** — Combines dense semantic search (Qdrant + `all-mpnet-base-v2`) with sparse BM25 scoring at a 0.7 / 0.3 blend for high-quality chunk retrieval.
 - **Conversation history** — Injects prior turns into the LLM call for coherent multi-turn dialogue.
 - **RAG evaluation suite** — Automated RAGAS evaluation of Faithfulness, Answer Relevancy, and Context Precision against a held-out slice of the cleaned dataset.
 
@@ -220,7 +220,7 @@ pytest tests/test_rag_evaluation.py -v
 | Answer Relevancy | ≥ 0.25 |
 | Context Precision | measured, no hard threshold |
 
-The evaluator uses `llama-3.1-8b-instant` via Groq and `all-MiniLM-L6-v2` embeddings from HuggingFace. Retrieval is mocked during evaluation so that ground-truth chunks are injected directly, isolating generation quality from retrieval noise.
+The evaluator uses `llama-3.1-8b-instant` via Groq and `all-mpnet-base-v2` embeddings from HuggingFace. Retrieval is mocked during evaluation so that ground-truth chunks are injected directly, isolating generation quality from retrieval noise.
 
 ---
 
@@ -233,7 +233,8 @@ The evaluator uses `llama-3.1-8b-instant` via Groq and `all-MiniLM-L6-v2` embedd
 | Intent classification | `llama-3.3-70b-versatile` | Groq API |
 | Translation | `llama-3.1-8b-instant` | Groq API |
 | RAG generation | `llama-3.1-8b-instant` | Groq API |
-| Embeddings (retrieval) | `all-MiniLM-L6-v2` | `sentence-transformers` |
+| Embeddings (retrieval) | `all-mpnet-base-v2` | `sentence-transformers` |
+| Reranker | `BAAI/bge-reranker-v2-m3` | `CrossEncoder` (sentence-transformers) |
 
 ---
 

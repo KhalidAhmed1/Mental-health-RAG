@@ -91,67 +91,67 @@ def test_retrieval_recall(sample_test_data):
     assert mean_recall >= 0.40, f"Retrieval recall {mean_recall} is below target threshold."
 
 
-# def test_generation_quality(judge_client, sample_test_data):
-#     """
-#     Tests generation quality using a direct Custom G-Eval loop with native JSON validation.
-#     """
-#     print("\n================ Generation Quality Audit ================")
-#     scores = []
+def test_generation_quality(judge_client, sample_test_data):
+    """
+    Tests generation quality using a direct Custom G-Eval loop with native JSON validation.
+    """
+    print("\n================ Generation Quality Audit ================")
+    scores = []
 
-#     for i, row in sample_test_data.iterrows():
-#         question = row["Context"]
-#         ground_truth = row["Response"]
+    for i, row in sample_test_data.iterrows():
+        question = row["Context"]
+        ground_truth = row["Response"]
         
-#         # 1. Generate the live answer from your pipeline
-#         answer = get_rag_answer(
-#             original_query=question,
-#             detected_language="english",
-#             emotion="Be empathetic and supportive.",
-#             history=[],
-#             top_k=5
-#         )
+        # 1. Generate the live answer from your pipeline
+        answer = get_rag_answer(
+            original_query=question,
+            detected_language="english",
+            emotion="Be empathetic and supportive.",
+            history=[],
+            top_k=5
+        )
 
-#         # 2. Define custom evaluation rubric for the mental health judge
-#         eval_prompt = f"""
-#         You are an expert clinical AI auditor. Evaluate the generated response based on the ground truth benchmark.
+        # 2. Define custom evaluation rubric for the mental health judge
+        eval_prompt = f"""
+        You are an expert clinical AI auditor. Evaluate the generated response based on the ground truth benchmark.
 
-#         [User Question]: {question}
-#         [Ground Truth Vetted Answer]: {ground_truth}
-#         [Generated Answer]: {answer}
+        [User Question]: {question}
+        [Ground Truth Vetted Answer]: {ground_truth}
+        [Generated Answer]: {answer}
 
-#         Evaluation Criteria:
-#         - Grounding (0-1): Does it stay true to factual boundaries without hallucinating outside coping strategies?
-#         - Empathy Tone (0-1): Is the tone warm, validating, and safe for a mental health context?
+        Evaluation Criteria:
+        - Grounding (0-1): Does it stay true to factual boundaries without hallucinating outside coping strategies?
+        - Empathy Tone (0-1): Is the tone warm, validating, and safe for a mental health context?
         
-#         Output your analysis EXACTLY in this JSON format:
-#         {{
-#             "reasoning": "Your brief explanation of differences or issues found",
-#             "grounding_score": 1.0,
-#             "empathy_score": 1.0
-#         }}
-#         """
+        Output your analysis EXACTLY in this JSON format:
+        {{
+            "reasoning": "Your brief explanation of differences or issues found",
+            "grounding_score": 1.0,
+            "empathy_score": 1.0
+        }}
+        """
         
-#         # 3. Call Groq directly using native json_object response framing
-#         response = judge_client.chat.completions.create(
-#             model="llama-3.3-70b-versatile",  # Using Groq's flagship versatile model
-#             messages=[{"role": "user", "content": eval_prompt}],
-#             response_format={"type": "json_object"},
-#             temperature=0.0
-#         )
+        # 3. Call Groq directly using native json_object response framing
+        response = judge_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",  # Using Groq's flagship versatile model
+            messages=[{"role": "user", "content": eval_prompt}],
+            response_format={"type": "json_object"},
+            temperature=0.0
+        )
         
-#         try:
-#             result = json.loads(response.choices[0].message.content)
-#             print(f"\n[Sample {i} Audit]")
-#             print(f"Reasoning: {result['reasoning']}")
-#             print(f"Grounding: {result['grounding_score']} | Empathy: {result['empathy_score']}")
+        try:
+            result = json.loads(response.choices[0].message.content)
+            print(f"\n[Sample {i} Audit]")
+            print(f"Reasoning: {result['reasoning']}")
+            print(f"Grounding: {result['grounding_score']} | Empathy: {result['empathy_score']}")
             
-#             scores.append(result['grounding_score'])
-#         except Exception as e:
-#             print(f"Parsing failed for sample {i}: {e}")
-#             scores.append(0.0)
+            scores.append(result['grounding_score'])
+        except Exception as e:
+            print(f"Parsing failed for sample {i}: {e}")
+            scores.append(0.0)
 
-#     mean_generation_score = sum(scores) / len(scores)
-#     print("\n============================================================")
-#     print(f"Mean Generation Quality Score: {mean_generation_score:.4f}")
+    mean_generation_score = sum(scores) / len(scores)
+    print("\n============================================================")
+    print(f"Mean Generation Quality Score: {mean_generation_score:.4f}")
     
-#     assert mean_generation_score >= 0.60, "Generation quality fell below validation thresholds."
+    assert mean_generation_score >= 0.60, "Generation quality fell below validation thresholds."
