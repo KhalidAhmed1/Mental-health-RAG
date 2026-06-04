@@ -26,17 +26,19 @@ Mental-health-RAG/
 ├── intentExamples.json         # Few-shot examples for the intent classifier
 │
 ├── artifacts/
-│   ├── chunk_embeddings.joblib # Precomputed chunk embeddings (cached)
-│   └── index_metadata.joblib   # BM25 index metadata (cached)
+│   ├── context_vec_embeddings.joblib # Precomputed chunk embeddings (cached)
+│   └── context_index_metadata.joblib   # BM25 index metadata (cached)
 │
 ├── data/
-│   ├── chunks.parquet          # Chunked knowledge base (used for BM25)
-│   
-│
+│   ├──context_index.parquet          # Chunked knowledge base (used for BM25)
+│   ├──response_embeddings.joblib
+|   ├──df_cleaned.csv
+│   ├──semantic_clustered_rag.csv
+|
 ├── models/
 │   ├── language_svc_model.pkl  # Trained SVC model for language detection
 │   ├── tfidf_vectorizer.pkl    # TF-IDF vectorizer for language detection
-│   └── emotion.pkl    # trained model for emotion detection
+│   └── emotion.pkl             # trained model for emotion detection
 │   
 │
 ├── modules/
@@ -46,6 +48,9 @@ Mental-health-RAG/
 │   ├── llm.py                  # RAG answer generation and direct responses
 │   └── retriever.py            # Hybrid BM25 + semantic retrieval (Qdrant)
 │
+├── templates/
+│   ├──chat.html     # Web UI for interacting with the chatbot
+|
 └── tests/
     └── test_rag_evaluation.py  # RAGAS evaluation test suite
 ```
@@ -116,13 +121,13 @@ pip install -r requirements.txt
 Create a `.env` file in the project root:
 
 ```env
-Groq_API_KEY=your_groq_api_key_here
-Groq_BASE_URL=https://api.groq.com/openai/v1
+OPENAI_API_KEY=your_groq_api_key_here
+OPENAI_BASE_URL=https://api.groq.com/openai/v1
 QDRANT_URL=https://your-qdrant-cluster-url
 QDRANT_API_KEY=your_qdrant_api_key_here
 ```
 
-> The `Groq_API_KEY` and `Groq_BASE_URL` variables point to the Groq endpoint, which exposes an OpenAI-compatible API.
+> The `OPENAI_API_KEY` and `OPENAI_BASE_URL` variables point to the Groq endpoint, which exposes an OpenAI-compatible API.
 
 ### Data & Model Files
 
