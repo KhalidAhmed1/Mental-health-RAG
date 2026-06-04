@@ -36,6 +36,7 @@ Mental-health-RAG/
 ├── models/
 │   ├── language_svc_model.pkl  # Trained SVC model for language detection
 │   ├── tfidf_vectorizer.pkl    # TF-IDF vectorizer for language detection
+│   ├── emotion.pkl    # trained model for emotion detection
 │   
 │
 ├── modules/
@@ -82,7 +83,7 @@ Intent Classification (Groq LLM + few-shot)
         (tone-adjusted system message + retrieved context)
             │
             ▼
-        LLM Generation (Groq — llama-3.1-8b-instant)
+        LLM Generation (Groq)
             │
             ▼
         Response in User's Language
@@ -101,7 +102,7 @@ Intent Classification (Groq LLM + few-shot)
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/Mental-health-RAG.git
+git clone https://github.com/KhalidAhmed1/Mental-health-RAG.git
 cd Mental-health-RAG
 
 python -m venv .venv
@@ -115,13 +116,13 @@ pip install -r requirements.txt
 Create a `.env` file in the project root:
 
 ```env
-OPENAI_API_KEY=your_groq_api_key_here
-OPENAI_BASE_URL=https://api.groq.com/openai/v1
+Groq_API_KEY=your_groq_api_key_here
+Groq_BASE_URL=https://api.groq.com/openai/v1
 QDRANT_URL=https://your-qdrant-cluster-url
 QDRANT_API_KEY=your_qdrant_api_key_here
 ```
 
-> The `OPENAI_API_KEY` and `OPENAI_BASE_URL` variables point to the Groq endpoint, which exposes an OpenAI-compatible API.
+> The `Groq_API_KEY` and `Groq_BASE_URL` variables point to the Groq endpoint, which exposes an OpenAI-compatible API.
 
 ### Data & Model Files
 
@@ -133,7 +134,7 @@ Before running, ensure the following files are present:
 | `data/df_cleaned.csv` | Cleaned Q&A dataset for evaluation |
 | `models/language_svc_model.pkl` | Trained SVC language detector |
 | `models/tfidf_vectorizer.pkl` | TF-IDF vectorizer paired with the SVC |
-| `models/` (emotion files) | HuggingFace `text-classification` model directory |
+| `models/emotion.pkl`  | HuggingFace `text-classification` model directory |
 | `intentExamples.json` | Few-shot examples for intent classification |
 
 ---
@@ -143,7 +144,7 @@ Before running, ensure the following files are present:
 ### Run the App
 
 ```bash
-python app.py
+uvicorn app:app --reload --host 0.0.0.0 --port 8000
 ```
 
 ### Pipeline (programmatic)
