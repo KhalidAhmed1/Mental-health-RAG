@@ -9,7 +9,7 @@ An emotion-aware Retrieval-Augmented Generation (RAG) chatbot that delivers empa
 - **Multilingual support** — Detects the user's language (20+ languages) and responds in kind, translating queries to English for retrieval before translating answers back.
 - **Emotion-aware tone** — Classifies the emotional state of each message (sadness, joy, fear, anger, love, surprise) and adjusts the LLM's response tone accordingly.
 - **Intent routing** — Routes greetings, farewells, gratitude, and out-of-scope questions directly without hitting the RAG pipeline, reserving retrieval for genuine mental health queries.
-- **Hybrid retrieval** — Combines dense semantic search (Qdrant + `all-MiniLM-L6-v2`) with sparse BM25 scoring at a 0.7 / 0.3 blend for high-quality chunk retrieval.
+- **Hybrid retrieval** — Combines dense semantic search (Qdrant + `all-mpnet-base-v2`) with sparse BM25 scoring at a 0.7 / 0.3 blend for high-quality chunk retrieval.
 - **Conversation history** — Injects prior turns into the LLM call for coherent multi-turn dialogue.
 - **RAG evaluation suite** — Automated RAGAS evaluation of Faithfulness, Answer Relevancy, and Context Precision against a held-out slice of the cleaned dataset.
 
@@ -19,7 +19,7 @@ An emotion-aware Retrieval-Augmented Generation (RAG) chatbot that delivers empa
 
 ```
 Mental-health-RAG/
-├── .env                        # API keys and service URLs
+├── .env                        # API keys and service URLs (never commit)
 ├── .python-version             # Pinned Python version
 ├── app.py                      # Streamlit / FastAPI entry point
 ├── pipeline.py                 # Top-level orchestration pipeline
