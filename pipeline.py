@@ -20,11 +20,6 @@ intent_classifier = IntentClassifier()
 print("Intent classifier ready.")
 
 # ── Emotion model placeholder ────────────────────────────────────────────────
-# Uncomment and update the path once the emotion model pkl is received
-# import joblib, os
-# _emotion_model = joblib.load(os.path.join("models", "emotion_model.pkl"))
-# def predict_emotion(text: str) -> str:
-#     return _emotion_model.predict([text])[0]
 
 
 def pipeline(user_message: str, history: list = None) -> dict:

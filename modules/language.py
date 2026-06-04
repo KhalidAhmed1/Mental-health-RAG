@@ -2,7 +2,7 @@ import os
 import joblib
 
 # ── Language code → full name mapping ──────────────────────────────────────
-# Matches exactly what your language SVC model outputs (2-letter ISO codes)
+
 LANGUAGE_NAMES = {
     "pt": "Portuguese",
     "bg": "Bulgarian",

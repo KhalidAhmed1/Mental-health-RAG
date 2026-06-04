@@ -13,8 +13,8 @@ COLLECTION_NAME = "mental_health_rag"
 MODEL_NAME      = "all-mpnet-base-v2"
 SEMANTIC_WEIGHT = 0.7
 BM25_WEIGHT     = 0.3
-CANDIDATE_POOL  = 100  # Increased from 50 to maximize base document recall
-RERANK_POOL     = 35   # Expanded so the cross-encoder has a larger window to select from
+CANDIDATE_POOL  = 100  
+RERANK_POOL     = 35   
 
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

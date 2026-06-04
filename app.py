@@ -30,7 +30,6 @@ app = FastAPI(
 
 # ── In-memory session store ──────────────────────────────────────────────────
 # Stores conversation history per session_id
-# { session_id: [ {"role": "user", "content": "..."}, ... ] }
 _sessions: dict[str, list] = {}
 
 
